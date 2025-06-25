@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
-    public string roomName = "TestRoom";
-    public string playerPrefabName = "PlayerPrefab";
+    public string roomText = "TestRoom";
+    public string playerPrefabText = "PlayerPrefab";
     public Vector3 spawnPos = new Vector3(0, 0, 0);
 
     void Start()
@@ -17,13 +17,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("마스터 서버 연결됨, 룸 입장 시도...");
-        PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 6 }, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(roomText, new RoomOptions { MaxPlayers = 6 }, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("룸 입장 완료: " + roomName);
-        PhotonNetwork.Instantiate(playerPrefabName, spawnPos, Quaternion.identity);
+        Debug.Log("룸 입장 완료: " + roomText);
+        PhotonNetwork.Instantiate(playerPrefabText, spawnPos, Quaternion.identity);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

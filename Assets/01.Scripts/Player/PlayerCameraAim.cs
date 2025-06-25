@@ -12,17 +12,17 @@ public class PlayerCameraAim : MonoBehaviourPun
     public Vector3 offset = new Vector3(0, 1, -6);
     public float rotationSpeed = 30f;
 
-    private float yaw = 0f;
-    private float pitch = 15f;
+    [SerializeField] private float yaw = 0f;
+    [SerializeField] private float pitch = 15f;
 
     public float minPitch = -80f;
     public float maxPitch = 80f;
-    
+
     void LateUpdate()
     {
         //if (target == null) return;
         if (!photonView.IsMine) return;
-        
+
         MouseAim();
     }
 
@@ -41,7 +41,7 @@ public class PlayerCameraAim : MonoBehaviourPun
         mainCamera.transform.position = desiredPosition;
         mainCamera.transform.LookAt(target);
     }
-    
+
     public void SetInput(PlayerAction a)
     {
         input = a;

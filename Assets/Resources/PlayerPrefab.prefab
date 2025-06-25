@@ -133,6 +133,7 @@ Transform:
   m_Children:
   - {fileID: 4487381991157211904}
   - {fileID: 7067951163488226213}
+  - {fileID: 246511278135864577}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6896679587412504387
@@ -288,7 +289,10 @@ MonoBehaviour:
   runCoefficient: 3
   dashForce: 45
   mainCamera: {fileID: 0}
-  cameraName: MainCamera
+  cameraText: MainCamera
+  firePoint: {fileID: 0}
+  firePointText: FirePoint
+  bulletText: Bullet
 --- !u!114 &3988526248554419576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +321,8 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   offset: {x: 0, y: 1, z: -6}
   rotationSpeed: 30
+  yaw: 0
+  pitch: 15
   minPitch: -80
   maxPitch: 80
 --- !u!114 &3447442753712092140
@@ -437,3 +443,34 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7782776441223019339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 246511278135864577}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &246511278135864577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782776441223019339}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.49, z: 0.624}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4098736016222353443}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

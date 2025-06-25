@@ -15,7 +15,7 @@ public class PlayerHandler : MonoBehaviourPun
     public void PlayerHealthChange(float health)
     {
         playerStatus.Health += health;
-        Debug.Log($"[{photonView.Owner.NickName}] 피격됨! 현재 체력:{playerStatus.Health}");
+        Debug.Log($"[{photonView.Owner.UserId}] 피격됨! 현재 체력:{playerStatus.Health}");
 
         photonView.RPC("UpdateHealth", RpcTarget.Others, playerStatus.Health);
     }
@@ -25,6 +25,6 @@ public class PlayerHandler : MonoBehaviourPun
     {
         if (photonView.IsMine) return; // 나는 이미 체력 알고 있음
         playerStatus.Health = newHealth;
-        Debug.Log($"[갱신됨] 다른 사람이 본 내 체력: {photonView.Owner.NickName},{playerStatus.Health}");
+        Debug.Log($"[갱신됨] 다른 사람이 본 내 체력: {photonView.Owner.UserId},{playerStatus.Health}");
     }
 }

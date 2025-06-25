@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviourPun
 {
     private Rigidbody playerRigidBody;
-    private PlayerCameraAim  playerCameraAim;
+    private PlayerCameraAim playerCameraAim;
     private PlayerAction input;
 
     private float activeMoveSpeed;
@@ -22,9 +22,13 @@ public class PlayerController : MonoBehaviourPun
     private Vector3 lastMoveDirection = Vector3.forward;
 
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private string cameraName = "MainCamera";
+    [SerializeField] private string cameraText = "MainCamera";
 
-    
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private string firePointText = "FirePoint";
+    [SerializeField] private string bulletText = "Bullet";
+    Quaternion fireOffset = Quaternion.Euler(-20f, 0f, 0f);
+
 
     private void Awake()
     {
@@ -32,7 +36,7 @@ public class PlayerController : MonoBehaviourPun
         {
             playerRigidBody = GetComponent<Rigidbody>();
             input = new PlayerAction();
-            playerCameraAim =  GetComponent<PlayerCameraAim>();
+            playerCameraAim = GetComponent<PlayerCameraAim>();
         }
     }
 
@@ -45,24 +49,10 @@ public class PlayerController : MonoBehaviourPun
 
             input.PlayerActionMap.Run.started += OnRunStarted;
             input.PlayerActionMap.Run.canceled += OnRunCanceled;
+
             input.PlayerActionMap.Dash.started += OnDashStarted;
-        }
-    }
 
-    private void Start()
-    {
-        if (IsPhotonViewIsMine())
-        {
-            //메인 카메라 찾아주기
-            mainCamera = transform.Find(cameraName).GetComponent<Camera>();
-            mainCamera.gameObject.SetActive(true);
-            playerCameraAim.SetInput(input);
-            playerCameraAim.target = transform;
-            playerCameraAim.mainCamera = mainCamera;
-
-            activeMoveSpeed = baseMoveSpeed;
-            activeVerticalSpeed = baseVerticalSpeed;
-            activeMaxSpeed = baseMaxSpeed;
+            input.PlayerActionMap.Attack.started += OnAttackStarted;
         }
     }
 
@@ -75,9 +65,32 @@ public class PlayerController : MonoBehaviourPun
 
             input.PlayerActionMap.Run.started -= OnRunStarted;
             input.PlayerActionMap.Run.canceled -= OnRunCanceled;
+
             input.PlayerActionMap.Dash.started -= OnDashStarted;
+
+            input.PlayerActionMap.Attack.started -= OnAttackStarted;
         }
     }
+
+    private void Start()
+    {
+        if (IsPhotonViewIsMine())
+        {
+            //카메라 찾아주기
+            mainCamera = transform.Find(cameraText).GetComponent<Camera>();
+            mainCamera.gameObject.SetActive(true);
+            playerCameraAim.SetInput(input);
+            playerCameraAim.target = transform;
+            playerCameraAim.mainCamera = mainCamera;
+
+            firePoint = transform.Find(firePointText);
+
+            activeMoveSpeed = baseMoveSpeed;
+            activeVerticalSpeed = baseVerticalSpeed;
+            activeMaxSpeed = baseMaxSpeed;
+        }
+    }
+
 
     private void FixedUpdate()
     {
@@ -143,12 +156,6 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-    private void Dash()
-    {
-        playerRigidBody.AddForce(lastMoveDirection.normalized
-                                 * dashForce, ForceMode.Impulse);
-    }
-
     private void OnRunStarted(InputAction.CallbackContext context)
     {
         if (Mathf.Approximately(activeMoveSpeed, baseMoveSpeed) &&
@@ -167,9 +174,23 @@ public class PlayerController : MonoBehaviourPun
         activeMaxSpeed = baseMaxSpeed;
     }
 
+    private void Dash()
+    {
+        playerRigidBody.AddForce(lastMoveDirection.normalized
+                                 * dashForce, ForceMode.Impulse);
+    }
+
     private void OnDashStarted(InputAction.CallbackContext context)
     {
         dashPressed = true;
+    }
+
+    private void OnAttackStarted(InputAction.CallbackContext context)
+    {
+        GameObject bullet = PhotonNetwork.Instantiate(bulletText, firePoint.position,
+            mainCamera.transform.rotation * fireOffset, 0);
+        
+        bullet.GetComponent<Bullet>().SetShooter(photonView.Owner.ActorNumber);
     }
 
     private bool IsPhotonViewIsMine()
