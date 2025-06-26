@@ -31,9 +31,7 @@ public class PlayerColorSync : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             
             //플레이어 라인 렌더러 색 변경
-            playerTrailRenderer.material.color = playerMaterial.color;
-            playerTrailRenderer.startColor = playerTrailRenderer.material.color * 3f;
-            playerTrailRenderer.endColor = playerTrailRenderer.material.color;
+            playerTrailRenderer.material.color = playerMaterial.color*3f;
         }
         else
         {
@@ -43,9 +41,7 @@ public class PlayerColorSync : MonoBehaviourPunCallbacks
                 playerMaterial.color = new Color(colorVec.x, colorVec.y, colorVec.z);
 
                 //플레이어 라인 렌더러 색 변경
-                playerTrailRenderer.material.color = playerMaterial.color;
-                playerTrailRenderer.startColor = playerTrailRenderer.material.color * 3f;
-                playerTrailRenderer.endColor = playerTrailRenderer.material.color;
+                playerTrailRenderer.material.color = playerMaterial.color*3f;
             }
         }
     }
