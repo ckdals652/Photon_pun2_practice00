@@ -18,6 +18,12 @@ public class PlayerCameraAim : MonoBehaviourPun
     public float minPitch = -80f;
     public float maxPitch = 80f;
 
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
     void LateUpdate()
     {
         //if (target == null) return;

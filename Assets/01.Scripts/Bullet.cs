@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviourPun
     private int shooterActorNumber;
     private int DestroyMask;
 
-    [SerializeField]private float addGravity = 10f;
+    [SerializeField] private float addGravity = 10f;
 
     private void Start()
     {
@@ -25,11 +25,13 @@ public class Bullet : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!photonView.IsMine) return;
+        
         if (other.gameObject.layer == (int)EnumLayer.Player)
         {
             PhotonView pv = other.GetComponent<PhotonView>();
 
-            // 자기 자신이 쏜 총알이면 무시
+            // other이 null이 아니고 자기 자신이 쏜 총알이면 무시
             if (pv != null && pv.Owner.ActorNumber == shooterActorNumber)
                 return;
 
@@ -47,7 +49,7 @@ public class Bullet : MonoBehaviourPun
 
     private void MoveBullet()
     {
-        rigidbody.AddForce((transform.forward * BulletSpeed) 
+        rigidbody.AddForce((transform.forward * BulletSpeed)
                            + (-transform.up * addGravity), ForceMode.VelocityChange);
     }
 

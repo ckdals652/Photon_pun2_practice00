@@ -147,9 +147,9 @@ public class PlayerController : MonoBehaviourPun
         }
 
         // 9. 이동 방향이 있을 때 회전
-        if (moveDirection != Vector3.zero)
+        if (force != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            Quaternion targetRotation = Quaternion.LookRotation(force);
             transform.rotation = Quaternion.Slerp
                 (transform.rotation, targetRotation, 10f * Time.fixedDeltaTime);
             //transform.rotation = targetRotation;

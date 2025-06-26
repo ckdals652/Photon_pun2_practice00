@@ -1,16 +1,23 @@
+using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Random = UnityEngine.Random;
 
 public class PlayerColorSync : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Material playerMaterial;
     private string playerColorText = "PlayerColor";
+    private TrailRenderer playerTrailRenderer;
+
+    private void Awake()
+    {
+        playerMaterial = GetComponent<Renderer>().material;
+        playerTrailRenderer = GetComponent<TrailRenderer>();
+    }
 
     private void Start()
     {
-        playerMaterial = GetComponent<Renderer>().material;
-        
         if (photonView.IsMine)
         {
             playerMaterial.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
@@ -22,6 +29,11 @@ public class PlayerColorSync : MonoBehaviourPunCallbacks
             };
 
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            
+            //플레이어 라인 렌더러 색 변경
+            playerTrailRenderer.material.color = playerMaterial.color;
+            playerTrailRenderer.startColor = playerTrailRenderer.material.color * 3f;
+            playerTrailRenderer.endColor = playerTrailRenderer.material.color;
         }
         else
         {
@@ -29,10 +41,15 @@ public class PlayerColorSync : MonoBehaviourPunCallbacks
             {
                 Vector3 colorVec = (Vector3)photonView.Owner.CustomProperties[playerColorText];
                 playerMaterial.color = new Color(colorVec.x, colorVec.y, colorVec.z);
+
+                //플레이어 라인 렌더러 색 변경
+                playerTrailRenderer.material.color = playerMaterial.color;
+                playerTrailRenderer.startColor = playerTrailRenderer.material.color * 3f;
+                playerTrailRenderer.endColor = playerTrailRenderer.material.color;
             }
         }
     }
-    
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if (photonView.Owner == targetPlayer && changedProps.ContainsKey(playerColorText))
