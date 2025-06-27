@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviourPun
 
     [SerializeField] private CinemachineBrain mainCamera;
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
-    
+
 
     [SerializeField] private Transform firePoint;
     [SerializeField] private string firePointText = "FirePoint";
@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviourPun
     {
         if (IsPhotonViewIsMine())
         {
-            playerRigidBody = GetComponent<Rigidbody>();
             input = new PlayerAction();
+            playerRigidBody = GetComponent<Rigidbody>();
         }
     }
 
@@ -79,12 +79,13 @@ public class PlayerController : MonoBehaviourPun
         {
             //카메라 찾아주기
             mainCamera = FindObjectOfType<CinemachineBrain>();
-            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-            playerCameraAim = FindObjectOfType<PlayerCameraAim>();
+            virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>(true);
+            virtualCamera.gameObject.SetActive(true);
+            playerCameraAim = GetComponent<PlayerCameraAim>();
             //virtualCamera.Follow = transform;
             //virtualCamera.LookAt = transform;
             playerCameraAim.SetInput(input);
-            playerCameraAim.target = transform;
+            playerCameraAim.player = transform;
             playerCameraAim.virtualCamera = virtualCamera;
 
             firePoint = transform.Find(firePointText);
@@ -193,7 +194,7 @@ public class PlayerController : MonoBehaviourPun
     {
         GameObject bullet = PhotonNetwork.Instantiate(bulletText, firePoint.position,
             mainCamera.transform.rotation * fireOffset, 0);
-        
+
         bullet.GetComponent<Bullet>().SetShooter(photonView.Owner.ActorNumber);
     }
 
