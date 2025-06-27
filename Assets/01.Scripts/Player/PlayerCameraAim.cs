@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class PlayerCameraAim : MonoBehaviourPun
     private PlayerAction input;
 
     public Transform target;
-    public Camera mainCamera;
+    public CinemachineVirtualCamera virtualCamera;
     public Vector3 offset = new Vector3(0, 1, -6);
     public float rotationSpeed = 30f;
 
@@ -44,8 +43,8 @@ public class PlayerCameraAim : MonoBehaviourPun
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
         Vector3 desiredPosition = target.position + rotation * offset;
 
-        mainCamera.transform.position = desiredPosition;
-        mainCamera.transform.LookAt(target);
+        virtualCamera.transform.position = desiredPosition;
+        virtualCamera.transform.LookAt(target);
     }
 
     public void SetInput(PlayerAction a)

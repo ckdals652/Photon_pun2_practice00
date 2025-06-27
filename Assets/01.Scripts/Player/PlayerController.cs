@@ -1,6 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -21,8 +22,9 @@ public class PlayerController : MonoBehaviourPun
     private bool dashPressed = false;
     private Vector3 lastMoveDirection = Vector3.forward;
 
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private string cameraText = "MainCamera";
+    [SerializeField] private CinemachineBrain mainCamera;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    
 
     [SerializeField] private Transform firePoint;
     [SerializeField] private string firePointText = "FirePoint";
@@ -36,7 +38,6 @@ public class PlayerController : MonoBehaviourPun
         {
             playerRigidBody = GetComponent<Rigidbody>();
             input = new PlayerAction();
-            playerCameraAim = GetComponent<PlayerCameraAim>();
         }
     }
 
@@ -77,11 +78,14 @@ public class PlayerController : MonoBehaviourPun
         if (IsPhotonViewIsMine())
         {
             //카메라 찾아주기
-            mainCamera = transform.Find(cameraText).GetComponent<Camera>();
-            mainCamera.gameObject.SetActive(true);
+            mainCamera = FindObjectOfType<CinemachineBrain>();
+            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            playerCameraAim = FindObjectOfType<PlayerCameraAim>();
+            //virtualCamera.Follow = transform;
+            //virtualCamera.LookAt = transform;
             playerCameraAim.SetInput(input);
             playerCameraAim.target = transform;
-            playerCameraAim.mainCamera = mainCamera;
+            playerCameraAim.virtualCamera = virtualCamera;
 
             firePoint = transform.Find(firePointText);
 
