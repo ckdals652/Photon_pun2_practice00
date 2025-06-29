@@ -194,6 +194,15 @@ public class PlayerController : MonoBehaviourPun
 
     private void OnAttackStarted(InputAction.CallbackContext context)
     {
+        Vector3 fireDir = mainCamera.transform.forward;
+        fireDir.y = 0f;
+
+        if (fireDir != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(fireDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 20f * Time.deltaTime);
+        }
+        
         GameObject bullet = PhotonNetwork.Instantiate(bulletText, firePoint.position,
             mainCamera.transform.rotation * fireOffset, 0);
 

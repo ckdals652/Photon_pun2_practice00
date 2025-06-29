@@ -7,8 +7,7 @@
     <list default="true" id="5e3649b9-f209-444a-ae8e-a361dd017c10" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Photon_pun2_practice00/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photon_pun2_practice00/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/01.Scripts/Player/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Action/Player.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Action/Player.inputactions" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Action/PlayerAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Action/PlayerAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PlayerPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PlayerPrefab.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +141,7 @@
       <workItem from="1751023019126" duration="819000" />
       <workItem from="1751023928764" duration="1986000" />
       <workItem from="1751032514713" duration="3932000" />
-      <workItem from="1751166065082" duration="789000" />
+      <workItem from="1751166065082" duration="1763000" />
     </task>
     <servers />
   </component>
