@@ -38,12 +38,12 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""RiseFall"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""2618f5d1-1eee-4027-9fcc-51491d75f1e8"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""MouseAim"",
@@ -76,6 +76,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""6cb93ea5-a5d7-43ad-9235-441b3523000b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hock"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff00b546-e9e0-49aa-8532-92c287aeb1be"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -139,26 +148,59 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""8c878990-bee8-4034-889d-78f4bae80e02"",
+                    ""name"": ""2D Vector"",
+                    ""id"": ""2f520fc4-df5f-47c4-a855-62aafeccd5dd"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RiseFall"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c396900d-9032-4ebb-8bc1-4a99e51079ef"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RiseFall"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""a998e732-ffd1-43ec-9ca7-bd105433bcfd"",
+                    ""name"": ""down"",
+                    ""id"": ""0489ede9-5582-474b-98b1-cf5611ae5e33"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RiseFall"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""09deffe1-3460-478b-a79d-880e79c0be37"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RiseFall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c697a409-fae0-4521-b58e-918ff628a51a"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RiseFall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -203,6 +245,17 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5859c96f-e0ad-4224-8bc2-3d0c3f7aa401"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -217,6 +270,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
         m_PlayerActionMap_Run = m_PlayerActionMap.FindAction("Run", throwIfNotFound: true);
         m_PlayerActionMap_Attack = m_PlayerActionMap.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerActionMap_Hock = m_PlayerActionMap.FindAction("Hock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -284,6 +338,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_Dash;
     private readonly InputAction m_PlayerActionMap_Run;
     private readonly InputAction m_PlayerActionMap_Attack;
+    private readonly InputAction m_PlayerActionMap_Hock;
     public struct PlayerActionMapActions
     {
         private @PlayerAction m_Wrapper;
@@ -294,6 +349,7 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_PlayerActionMap_Dash;
         public InputAction @Run => m_Wrapper.m_PlayerActionMap_Run;
         public InputAction @Attack => m_Wrapper.m_PlayerActionMap_Attack;
+        public InputAction @Hock => m_Wrapper.m_PlayerActionMap_Hock;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActionMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -321,6 +377,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
+            @Hock.started += instance.OnHock;
+            @Hock.performed += instance.OnHock;
+            @Hock.canceled += instance.OnHock;
         }
 
         private void UnregisterCallbacks(IPlayerActionMapActions instance)
@@ -343,6 +402,9 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
+            @Hock.started -= instance.OnHock;
+            @Hock.performed -= instance.OnHock;
+            @Hock.canceled -= instance.OnHock;
         }
 
         public void RemoveCallbacks(IPlayerActionMapActions instance)
@@ -368,5 +430,6 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnHock(InputAction.CallbackContext context);
     }
 }

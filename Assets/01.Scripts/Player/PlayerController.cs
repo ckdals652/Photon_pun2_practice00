@@ -48,10 +48,10 @@ public class PlayerController : MonoBehaviourPun
             //이동 활성화
             input.Enable();
 
-            input.PlayerActionMap.Run.started += OnRunStarted;
-            input.PlayerActionMap.Run.canceled += OnRunCanceled;
-
-            input.PlayerActionMap.Dash.started += OnDashStarted;
+            input.PlayerActionMap.Run.started += OnRun;
+            input.PlayerActionMap.Run.canceled += OnRun;
+            
+            input.PlayerActionMap.Dash.started += OnDash;
 
             input.PlayerActionMap.Attack.started += OnAttackStarted;
         }
@@ -64,10 +64,10 @@ public class PlayerController : MonoBehaviourPun
             //이동 비활성화
             input.Disable();
 
-            input.PlayerActionMap.Run.started -= OnRunStarted;
-            input.PlayerActionMap.Run.canceled -= OnRunCanceled;
+            input.PlayerActionMap.Run.started -= OnRun;
+            input.PlayerActionMap.Run.canceled -= OnRun;
 
-            input.PlayerActionMap.Dash.started -= OnDashStarted;
+            input.PlayerActionMap.Dash.started -= OnDash;
 
             input.PlayerActionMap.Attack.started -= OnAttackStarted;
         }
@@ -129,9 +129,8 @@ public class PlayerController : MonoBehaviourPun
         Vector3 moveDirection = camForward * moveInput.y + camRight * moveInput.x;
 
         // 4. 수직 이동 처리 (Space / Ctrl)
-        float y = 0f;
-        if (Keyboard.current.spaceKey.isPressed) y += 1f;
-        if (Keyboard.current.leftCtrlKey.isPressed) y -= 1f;
+        Vector2 riseFall = input.PlayerActionMap.RiseFall.ReadValue<Vector2>();
+        float y = riseFall.y;
 
         // 5. 최종 이동 벡터
         Vector3 force = moveDirection.normalized * activeMoveSpeed + Vector3.up * (y * activeVerticalSpeed);
@@ -161,22 +160,22 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-    private void OnRunStarted(InputAction.CallbackContext context)
+    private void OnRun(InputAction.CallbackContext context)
     {
-        if (Mathf.Approximately(activeMoveSpeed, baseMoveSpeed) &&
-            Mathf.Approximately(activeVerticalSpeed, baseVerticalSpeed))
+        if (context.phase == InputActionPhase.Started)
         {
+            // 달리기 시작
             activeMoveSpeed *= runCoefficient;
             activeVerticalSpeed *= runCoefficient;
             activeMaxSpeed *= runCoefficient;
         }
-    }
-
-    private void OnRunCanceled(InputAction.CallbackContext context)
-    {
-        activeMoveSpeed = baseMoveSpeed;
-        activeVerticalSpeed = baseVerticalSpeed;
-        activeMaxSpeed = baseMaxSpeed;
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            // 달리기 중지
+            activeMoveSpeed = baseMoveSpeed;
+            activeVerticalSpeed = baseVerticalSpeed;
+            activeMaxSpeed = baseMaxSpeed;
+        }
     }
 
     private void Dash()
@@ -185,9 +184,12 @@ public class PlayerController : MonoBehaviourPun
                                  * dashForce, ForceMode.Impulse);
     }
 
-    private void OnDashStarted(InputAction.CallbackContext context)
+    private void OnDash(InputAction.CallbackContext context)
     {
-        dashPressed = true;
+        if (context.phase == InputActionPhase.Started)
+        {
+            dashPressed = true;
+        }
     }
 
     private void OnAttackStarted(InputAction.CallbackContext context)
@@ -196,6 +198,11 @@ public class PlayerController : MonoBehaviourPun
             mainCamera.transform.rotation * fireOffset, 0);
 
         bullet.GetComponent<Bullet>().SetShooter(photonView.Owner.ActorNumber);
+    }
+
+    private void OnHock(InputAction.CallbackContext context)
+    {
+        
     }
 
     private bool IsPhotonViewIsMine()
